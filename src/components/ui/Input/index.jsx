@@ -1,14 +1,16 @@
 import { forwardRef } from "react";
-import Input from "./Input";
-import Label from "./Label";
 
-const InputForm = forwardRef(({ label, type, name, placeholder }, ref) => {
+const Input = forwardRef(({ type, placeholder, name }, ref) => {
   return (
-    <div>
-      <Label htmlFor={name}>{label}</Label>
-      <Input type={type} name={name} placeholder={placeholder} ref={ref} />
-    </div>
+    <input
+      type={type}
+      className="text-sm border border-color-grey rounded w-full py-2 px-3 text-color-dark placeholder-opacity-50 mb-4 focus:border-color-green focus:outline-none"
+      placeholder={placeholder}
+      name={name}
+      id={name}
+      ref={ref}
+    />
   );
 });
 
-export default InputForm;
+export default Input;

@@ -2,7 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-.navbar-border {
-  z-index: 9999;
-  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.custom-checkbox {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.15em;
+  height: 1.15em;
+  border: 2px solid #9ca3af;
+  border-radius: 0.25em;
+  display: grid;
+  place-content: center;
+  transition: border-color 120ms ease-in-out;
+}
+.custom-checkbox::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: transform 120ms ease-in-out;
+  box-shadow: inset 1em 1em #00a19f;
+  background-color: CanvasText;
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 20%, 80% 0, 43% 62%);
+}
+.custom-checkbox:checked {
+  border-color: #00a19f;
+}
+.custom-checkbox:checked::before {
+  transform: scale(1);
 }
