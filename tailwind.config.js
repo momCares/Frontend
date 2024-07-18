@@ -21,7 +21,9 @@ module.exports = {
         green: "#00A19F",
         dark: "#000000",
         pink: "#E9447C",
-        customRed: "#d46474"
+        customRed: "#d46474",
+        gray: "#B5CBB7",
+        gold: "#F7AD1A",
       },
     },
   },

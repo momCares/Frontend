@@ -30,14 +30,37 @@
   height: 0.65em;
   transform: scale(0);
   transition: transform 120ms ease-in-out;
-  box-shadow: inset 1em 1em #00a19f;
+  box-shadow: inset 1em 1em #F99999;
   background-color: CanvasText;
   transform-origin: bottom left;
   clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 20%, 80% 0, 43% 62%);
 }
 .custom-checkbox:checked {
-  border-color: #00a19f;
+  border-color: #F99999;
 }
 .custom-checkbox:checked::before {
   transform: scale(1);
 }
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background-color: #e9fcff ;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img { 
+  display: block; 
+  width: 100%;
+  height: 100%;
+   object-fit: cover;
+ }

@@ -1,9 +1,20 @@
-import { CardProduct } from "@/components/ui/CardProduct";
+import Carousel from "@/components/layouts/Carousel";
+import Featured from "@/components/layouts/Featured";
+
 export default function HomePage() {
   return (
-    <div>
-      <h1 className="text-center font-bold text-4xl">Welcome to Mom Cares</h1>
-      <CardProduct />
+    <div className="w-full h-full">
+      <title>Mom Cares</title>
+      <main>
+        <div>
+          <ul>
+            <li>
+              <Carousel />
+            </li>
+          </ul>
+        </div>
+      </main>
+      <Featured />
     </div>
   );
 }
