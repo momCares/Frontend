@@ -3,12 +3,10 @@
 import InputSearch from "@/components/layouts/Navbar/InputSearch";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
 import React from "react";
-import { BellSimple, ShoppingCart } from "@phosphor-icons/react";
+import { BellSimple, ShoppingCart, User } from "@phosphor-icons/react";
 
 const Navbar = () => {
-
   return (
     <header className=" md:px-10 px-2 bg-color-customRed z-10 navbar-border w-full shadow-sm">
       <div className="flex md:flex-row flex-col justify-between md:items-center p-4 gap-2">
@@ -30,6 +28,11 @@ const Navbar = () => {
               <Link href="/carts">
                 <Button className="text-color-primary hover:bg-color-primary hover:text-color-customRed text-color-grey p-1 rounded-lg">
                   <ShoppingCart size={26} />
+                </Button>
+              </Link>
+              <Link href="/profiles">
+                <Button className="text-color-primary hover:bg-color-primary hover:text-color-customRed text-color-grey p-1 rounded-lg">
+                  <User size={26} />
                 </Button>
               </Link>
             </div>

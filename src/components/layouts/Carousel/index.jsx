@@ -12,15 +12,15 @@ const Carousel = () => {
         <ul className="font-semibold  pt-20  text-center text-color-primary">
           <button className="px-8">
             {" "}
-            <a href="#hero"></a> HOME
+            <a href="#carousel"></a> HOME
           </button>
           <button className="px-8">
             {" "}
-            <a href="#popular"></a>BEST SELLER
+            <a href="#featured"></a>BEST SELLER
           </button>
           <button className="px-8">
             {" "}
-            <a href="#lastest"></a>KATEGORI
+            <a href=""></a>KATEGORI
           </button>
           <button className="px-8">
             {" "}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Poppins } from "next/font/google";
 import NavBar from "@/components/layouts/NavBar";
 import "./globals.css";
@@ -19,9 +21,9 @@ export default function RootLayout({ children, session }) {
         className={`${poppins.className} bg-color-primary`}
         suppressHydrationWarning={true}
       >
-          <NavBar />
-          {children}
-          <Footer />
+        <NavBar />
+        {children}
+        <Footer />
       </body>
     </html>
   );

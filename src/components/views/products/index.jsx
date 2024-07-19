@@ -46,9 +46,9 @@ const ProductView = () => {
         <div className="flex flex-col md:w-2/5 w-full md:py-10 py-2">
           <Image
             src={Diapers}
-            className="rounded-md w-full h-full object-cover"
+            className="border-2 border-color-pink shadow-xl rounded-xl w-full h-full object-cover"
           />
-          <div className="text-color-pink font-semibold flex flex-col gap-2 w-full mt-4">
+          <div className="pt-2 text-color-pink font-semibold flex flex-col gap-2 w-full mt-4">
             <h3 className="font-semibold">Product Details :</h3>
             <p className="text-sm line-clamp-2">Popok bayi</p>
             <h3 className="font-semibold text-color-grey">Description :</h3>
