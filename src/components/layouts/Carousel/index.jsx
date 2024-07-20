@@ -29,7 +29,7 @@ const Carousel = () => {
         </ul>
       </div>
       <div className="text-center ">
-        <h1 className="py-8 text-6xl font-bold  text-color-primary">
+        <h1 className="underline underline-offset-8 py-8 text-6xl font-bold  text-color-primary">
           Our Signature
         </h1>
       </div>
