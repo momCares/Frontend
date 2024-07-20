@@ -10,19 +10,19 @@ const ProductView = () => {
   const [quantity, setQuantity] = useState(1);
 
   const handleWishlistClick = () => {
-    console.log("Added to wishlist");
+    // console.log("Added to wishlist");
   };
 
   const handleShareClick = () => {
-    console.log("Shared product");
+    // console.log("Shared product");
   };
 
   const handleAddToCart = () => {
-    console.log("Added to cart");
+    // console.log("Added to cart");
   };
 
   const handleBuyNow = () => {
-    console.log("Buy now");
+    // console.log("Buy now");
   };
 
   const handleQuantityChange = (e) => {
