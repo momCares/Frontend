@@ -1,9 +1,18 @@
-import React from "react";
+"use client";
 
-const DetailProfile = ({ user, enterEditMode, editMode }) => {
+import React from "react";
+import { useRouter } from "next/navigation";
+
+const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
+  const router = useRouter();
+
+  const handleAddProductClick = () => {
+    router.push("/admin/add-products");
+  };
+
   return (
     <div className="bg-color-secondary flex flex-row items-center px-8 w-full py-2">
-      <div className=" w-4/12 h-screen p-10">
+      <div className="w-4/12 h-screen p-10">
         <h2 className="underline underline-offset-8 text-color-primary flex flex-row text-2xl font-bold mb-20">
           Account Setting
         </h2>
@@ -14,9 +23,17 @@ const DetailProfile = ({ user, enterEditMode, editMode }) => {
           <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
             Change Password
           </button>
-          <button className="w-full text-left p-2 rounded-lg h-10 my-2  hover:bg-color-pink">
+          <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
             Checkout List
           </button>
+          {isAdmin && (
+            <button
+              onClick={handleAddProductClick}
+              className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
+            >
+              Add Product
+            </button>
+          )}
         </div>
       </div>
 
@@ -71,7 +88,7 @@ const DetailProfile = ({ user, enterEditMode, editMode }) => {
             </p>
           </div>
 
-          <div className="flex justify-center items-center ">
+          <div className="flex justify-center items-center">
             <button
               onClick={enterEditMode}
               className="text-color-primary w-1/4 font-semibold rounded-lg h-10 bg-color-pink mt-2 shadow-md hover:bg-color-customRed"
