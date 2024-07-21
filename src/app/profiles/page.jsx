@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import EditProfile from "@/components/views/profiles/EditProfile";
-import { getUser, updateUser } from "../../modules/fetch/fetchUser";
 import UserProfile from "@/components/views/profiles/UserProfile";
+import { getUser, updateUser } from "../../modules/fetch/fetchUser";
 import { jwtDecode } from "jwt-decode";
 
 const ProfilePage = () => {
@@ -11,6 +11,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // Add state for admin role
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,8 +23,8 @@ const ProfilePage = () => {
       const fetchUser = async () => {
         try {
           const userData = await getUser(userId);
-          //   console.log("User Data:", userData);
           setUser(userData);
+          setIsAdmin(userData.role === "admin"); // Check if user is admin
           setLoading(false);
         } catch (err) {
           setError(err.message);
@@ -40,7 +41,7 @@ const ProfilePage = () => {
       window.location.reload();
       setEditMode(false);
     } catch (error) {
-      setError(err.message);
+      setError(error.message); // Fix error handling
     }
   };
 
@@ -62,9 +63,14 @@ const ProfilePage = () => {
           user={user}
           handleUpdateUser={handleUpdateUser}
           cancelEdit={cancelEdit}
+          isAdmin={isAdmin} // Pass isAdmin prop to EditProfile
         />
       ) : (
-        <UserProfile user={user} enterEditMode={enterEditMode} />
+        <UserProfile
+          user={user}
+          enterEditMode={enterEditMode}
+          isAdmin={isAdmin} // Pass isAdmin prop to UserProfile
+        />
       )}
     </div>
   );
