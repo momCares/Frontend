@@ -34,12 +34,12 @@ export default function HomePage() {
         <Carousel />
       </main>
       <div className="py-12 px-4 md:px-8 lg:px-16">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl text-color-primary font-bold text-center mb-8">
+        <h1 className="underline underline-offset-8 text-3xl md:text-4xl lg:text-6xl text-color-primary font-bold text-center mb-4 mt-14">
           Our Product
         </h1>
         {error && <p className="text-center text-red-500">{error}</p>}
-        <CardProduct products={products} limit={4} />
-        {products?.data?.products?.length > 4 && (
+        <CardProduct products={products} limit={5} />
+        {products?.data?.products?.length > 5 && (
           <div className="flex justify-center mt-8">
             <button
               onClick={handleViewMore}

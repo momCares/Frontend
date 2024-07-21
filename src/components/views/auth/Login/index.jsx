@@ -112,7 +112,7 @@ const LoginView = () => {
         {error && <p className="text-red-500">{error}</p>}
         <Button
           type="submit"
-          className="w-full rounded-lg h-10 bg-color-customRed hover:bg-color-secondary text-color-primary mt-2 mb-8"
+          className="w-full rounded-lg h-10 bg-color-customRed hover:bg-color-primary text-color-primary hover:text-color-pink hover:border-2 my-2"
         >
           {isLoading ? "Loading..." : "Login"}
         </Button>

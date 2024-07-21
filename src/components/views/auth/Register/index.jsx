@@ -13,6 +13,7 @@ const RegisterView = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showAffiliateCode, setShowAffiliateCode] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,13 +26,17 @@ const RegisterView = () => {
       email: form.email.value,
       password: form.password.value,
     };
-  
+
+    if (showAffiliateCode && form.affiliateCode.value) {
+      data.affiliateCode = form.affiliateCode.value;
+    }
+
     console.log("Form data:", data); // Log form data
-  
+
     try {
       const result = await axiosInstance.post("/auth/register", data);
       console.log("Response:", result); // Log response
-  
+
       if (result.status === 201) {
         form.reset();
         setSuccessMessage("Registration successful. Redirecting to login...");
@@ -49,7 +54,7 @@ const RegisterView = () => {
       if (error.response) {
         setError(
           error.response.data.message ||
-          "Something went wrong. Please try again."
+            "Something went wrong. Please try again."
         );
         console.error("Response error:", error.response.data.message); // Log response error
       } else if (error.request) {
@@ -61,10 +66,13 @@ const RegisterView = () => {
       }
     }
   };
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
+  };
+
+  const toggleAffiliateCodeVisibility = () => {
+    setShowAffiliateCode((prevState) => !prevState);
   };
 
   return (
@@ -74,7 +82,7 @@ const RegisterView = () => {
       linkText="Sudah punya akun? "
       linkName="Login"
     >
-         {error && (
+      {error && (
         <p className=" flex gap-2 items-center border rounded-md border-color-red p-3 mb-5 text-color-red text-xs bg-color-red bg-opacity-10 ">
           <XCircle size={20} /> {error}
         </p>
@@ -131,11 +139,36 @@ const RegisterView = () => {
             </button>
           </div>
         </div>
+        <div className="flex flex-col gap-3">
+          <Button
+            type="button"
+            onClick={toggleAffiliateCodeVisibility}
+            className="w-full rounded-lg h-10 bg-color-customRed hover:bg-color-primary text-color-primary hover:text-color-pink hover:border-2 my-2"
+          >
+            {showAffiliateCode ? "Hide Affiliate Code" : "Enter Affiliate Code"}
+          </Button>
+          {showAffiliateCode && (
+            <div className="flex flex-col gap-3">
+              <label
+                htmlFor="affiliateCode"
+                className="text-color-pink font-bold"
+              >
+                Affiliate Code
+              </label>
+              <Input
+                label="Affiliate Code"
+                name="affiliateCode"
+                type="text"
+                placeholder="Affiliate Code"
+              />
+            </div>
+          )}
+        </div>
 
         {error && <p className="text-red-500">{error}</p>}
         <Button
           type="submit"
-          className="w-full rounded-lg h-10 bg-color-customRed hover:bg-color-secondary text-color-primary my-2"
+          className="w-full rounded-lg h-10 bg-color-customRed hover:bg-color-primary text-color-primary hover:text-color-customRed hover:border-2 my-2"
         >
           {isLoading ? "Loading..." : "Register"}
         </Button>
