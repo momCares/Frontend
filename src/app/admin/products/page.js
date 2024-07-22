@@ -1,411 +1,351 @@
 "use client";
-import Button from "@/components/ui/Button";
-import { ArrowSquareIn } from "@phosphor-icons/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Button from "@/components/ui/Button";
+import {
+  ArrowSquareIn,
+  ListPlus,
+  ArrowLineLeft,
+  ArrowLineRight,
+} from "@phosphor-icons/react";
+import { debounce } from "lodash";
+import dynamic from "next/dynamic";
 
-const productsData = [
-  [
-    {
-      id: 1,
-      name: "Product One",
-      price: 100,
-      weight: 1,
-      category: "Makanan",
-      stock: 10,
-      sku: "PB0001",
-      slug: "product-one",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Product Two",
-      price: 150,
-      weight: 1.5,
-      category: "Mainan",
-      stock: 15,
-      sku: "PB0002",
-      slug: "product-two",
-      status: "Active",
-    },
-    {
-      id: 3,
-      name: "Product Three",
-      price: 200,
-      weight: 2,
-      category: "Perlengkapan Tidur",
-      stock: 20,
-      sku: "PB0003",
-      slug: "product-three",
-      status: "Inactive",
-    },
-    {
-      id: 4,
-      name: "Product Four",
-      price: 120,
-      weight: 1.2,
-      category: "Makanan",
-      stock: 12,
-      sku: "PB0004",
-      slug: "product-four",
-      status: "Active",
-    },
-    {
-      id: 5,
-      name: "Product Five",
-      price: 180,
-      weight: 1.8,
-      category: "Mainan",
-      stock: 18,
-      sku: "PB0005",
-      slug: "product-five",
-      status: "Inactive",
-    },
-    {
-      id: 6,
-      name: "Product Six",
-      price: 130,
-      weight: 1.3,
-      category: "Perlengkapan Tidur",
-      stock: 13,
-      sku: "PB0006",
-      slug: "product-six",
-      status: "Active",
-    },
-    {
-      id: 7,
-      name: "Product Seven",
-      price: 170,
-      weight: 1.7,
-      category: "Makanan",
-      stock: 17,
-      sku: "PB0007",
-      slug: "product-seven",
-      status: "Active",
-    },
-    {
-      id: 8,
-      name: "Product Eight",
-      price: 140,
-      weight: 1.4,
-      category: "Mainan",
-      stock: 14,
-      sku: "PB0008",
-      slug: "product-eight",
-      status: "Inactive",
-    },
-    {
-      id: 9,
-      name: "Product Nine",
-      price: 190,
-      weight: 1.9,
-      category: "Perlengkapan Tidur",
-      stock: 19,
-      sku: "PB0009",
-      slug: "product-nine",
-      status: "Active",
-    },
-    {
-      id: 10,
-      name: "Product Ten",
-      price: 110,
-      weight: 1.1,
-      category: "Makanan",
-      stock: 11,
-      sku: "PB0010",
-      slug: "product-ten",
-      status: "Inactive",
-    },
-  ],
-  [
-    {
-      id: 11,
-      name: "Product Eleven",
-      price: 160,
-      weight: "1.6 kg",
-      category: "Mainan",
-      stock: 16,
-      sku: "PB0011",
-      slug: "product-eleven",
-      status: "Active",
-    },
-    {
-      id: 12,
-      name: "Product Twelve",
-      price: 210,
-      weight: "2.1 kg",
-      category: "Perlengkapan Tidur",
-      stock: 21,
-      sku: "PB0012",
-      slug: "product-twelve",
-      status: "Active",
-    },
-    {
-      id: 13,
-      name: "Product Thirteen",
-      price: 125,
-      weight: "1.25 kg",
-      category: "Makanan",
-      stock: 13,
-      sku: "PB0013",
-      slug: "product-thirteen",
-      status: "Inactive",
-    },
-    {
-      id: 14,
-      name: "Product Fourteen",
-      price: 175,
-      weight: "1.75 kg",
-      category: "Mainan",
-      stock: 17,
-      sku: "PB0014",
-      slug: "product-fourteen",
-      status: "Active",
-    },
-    {
-      id: 15,
-      name: "Product Fifteen",
-      price: 195,
-      weight: "1.95 kg",
-      category: "Perlengkapan Tidur",
-      stock: 19,
-      sku: "PB0015",
-      slug: "product-fifteen",
-      status: "Inactive",
-    },
-  ],
-];
+const Select = dynamic(() => import("react-select"), { ssr: false });
 
-const getUniqueCategories = (data) => {
-  const categories = new Set();
-  data.forEach((page) => {
-    page.forEach((product) => {
-      categories.add(product.category);
-    });
-  });
-  return Array.from(categories);
-};
-
-const ProductsPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+const ProductPage = () => {
+  const router = useRouter();
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchTerms, setSearchTerms] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const uniqueCategories = getUniqueCategories(productsData);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [sortBy, setSortBy] = useState({ value: "id", label: "Default" });
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [loading, setLoading] = useState(false);
+  const perPage = 10;
 
   useEffect(() => {
-    fetchProductData();
-  }, [currentPage]);
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
-    filterProductData();
-  }, [searchTerm, filterStatus, filterCategory, sortBy, products]);
+    fetchProductsData();
+  }, [currentPage, searchTerms, selectedCategory, sortBy, sortOrder]);
 
-  const fetchProductData = async () => {
-    setProducts(productsData[currentPage - 1]);
-    setTotalPages(2);
+  const fetchProductsData = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/cms/products`,
+        {
+          params: {
+            page: currentPage,
+            limit: perPage,
+            role: "admin",
+            showDeleted: true,
+            searchTerms,
+            categoryId: selectedCategory ? selectedCategory.value : "",
+            sortBy: sortBy.value,
+            sortOrder,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const productsData = response.data.data;
+      setProducts(productsData.products);
+      setTotalPages(productsData.totalPages);
+    } catch (error) {
+      console.error("Fetch products error:", error.message || error);
+      toast.error("Failed to fetch products.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const filterProductData = () => {
-    let filteredData = [...products];
-
-    if (filterStatus) {
-      filteredData = filteredData.filter(
-        (product) => product.status === filterStatus
+  const fetchCategories = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/cms/categories`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-    }
 
-    if (filterCategory) {
-      filteredData = filteredData.filter(
-        (product) => product.category === filterCategory
+      const pages = response.data.data.totalPages;
+      let allCategories = response.data.data.categories;
+      for (let i = 2; i <= pages; i++) {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/cms/categories?page=${i}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        allCategories = allCategories.concat(res.data.data.categories);
+      }
+      setCategories(
+        allCategories.map((category) => ({
+          value: category.id,
+          label: `${category.id} : ${category.name}`,
+        }))
       );
+    } catch (error) {
+      console.error("Fetch categories error:", error.message || error);
+      toast.error("Failed to fetch categories.");
     }
+  };
 
-    if (searchTerm) {
-      filteredData = filteredData.filter((product) =>
-        Object.values(product).some((value) =>
-          String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      setSearchTerms(value);
+    }, 300),
+    []
+  );
 
-    if (sortBy) {
-      filteredData.sort((a, b) => {
-        if (a[sortBy] < b[sortBy]) return -1;
-        if (a[sortBy] > b[sortBy]) return 1;
-        return 0;
-      });
-    }
-
-    setFilteredProducts(filteredData);
+  const handleSearchChange = (e) => {
+    debouncedSearch(e.target.value);
   };
 
   const handleResetAll = () => {
-    setSearchTerm("");
-    setFilterStatus("");
-    setFilterCategory("");
-    setSortBy("");
+    setSearchTerms("");
+    setSelectedCategory(null);
+    setSortBy({ value: "id", label: "Default" });
+    setSortOrder("asc");
+    setCurrentPage(1);
   };
 
   const paginate = (pageNumber) => {
+    if (pageNumber < 1 || pageNumber > totalPages) return;
     setCurrentPage(pageNumber);
   };
 
+  const handleEditProduct = (slug) => {
+    router.push(`/admin/products/${slug}`);
+  };
+
+  const handleCreateProduct = () => {
+    router.push("/admin/add-products");
+  };
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPageNumbersToShow = 5;
+    let startPage = Math.max(
+      currentPage - Math.floor(maxPageNumbersToShow / 2),
+      1
+    );
+    let endPage = startPage + maxPageNumbersToShow - 1;
+
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = Math.max(endPage - maxPageNumbersToShow + 1, 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => paginate(i)}
+          className={`mx-1 px-3 py-1 text-color-primary hover:text-color-primary rounded hover:bg-color-pink ${
+            currentPage === i ? "font-bold" : ""
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return pageNumbers;
+  };
+
   return (
-    <div className="px-24 py-12 justify-center bg-color-secondary font-semibold">
-      <div className="flex justify-between items-center mb-8 mt-4">
-        <h1 className="underline underline-offset-8 text-color-primary text-2xl font-bold">
+    <div className="bg-color-secondary relative px-4 md:px-8 lg:px-32 pt-14 justify-center w-full h-screen">
+      <ToastContainer />
+      <div className="flex flex-col md:flex-row justify-between items-center mb-12 mt-4">
+        <h1 className="underline underline-offset-8 text-2xl font-bold text-color-primary">
           Products
         </h1>
         <button
           onClick={handleResetAll}
-          className="text-color-primary font-semibold hover:underline"
+          className="bg-color-primary hover:bg-color-pink text-color-pink hover:text-color-primary font-semibold rounded-lg h-10 w-full md:w-32 mt-4 md:mt-0"
         >
           Reset All
         </button>
       </div>
-      <div className="flex mb-8">
-        <select
-          className="text-color-pink border p-2 rounded mr-2"
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-        >
-          <option value="">Select By Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </select>
-        <select
-          className="text-color-pink border p-2 rounded mr-2"
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          <option value="">Select By Category</option>
-          {uniqueCategories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+      <div className="flex flex-col md:flex-row mb-2 space-y-2 md:space-y-0 md:space-x-2">
         <input
           type="text"
           placeholder="Search here..."
-          className="text-color-pink border p-2 rounded flex-1 mr-2"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          className="ring-2 ring-color-primary focus:ring-color-blue-500 focus:outline-none p-2 rounded flex-1"
+          onChange={handleSearchChange}
+          value={searchTerms}
         />
-        <select
-          className="text-color-pink border p-2 rounded"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+        <Button
+          type="button"
+          className="p-2 bg-color-pink hover:bg-color-primary text-color-primary hover:text-color-pink hover:border-2 rounded-lg h-10 flex items-center justify-center"
+          onClick={handleCreateProduct}
         >
-          <option value="">Sort by</option>
-          <option value="name">Name</option>
-          <option value="price">Price</option>
-          <option value="weight">Weight</option>
-          <option value="category">Category</option>
-          <option value="stock">Stock</option>
-          <option value="sku">SKU</option>
-          <option value="slug">Slug</option>
-          <option value="status">Status</option>
-        </select>
+          <ListPlus className="mr-2" />
+          Create
+        </Button>
       </div>
-      <div className="rounded-xl bg-color-primary overflow-x-auto mb-4">
-        <table className="min-w-full w-full">
-          <thead>
-            <tr>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                ID
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Name
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Price
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Weight
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Category
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Stock
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                SKU
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Slug
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Status
-              </th>
-              <th className="border-2 border-color-secondary text-color-pink px-4 py-2">
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-100">
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-32 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.id}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-60 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.name}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.price}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-40 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.weight}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.category}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.stock}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.sku}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.slug}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 w-80 overflow-hidden whitespace-nowrap truncate text-center">
-                  {product.status}
-                </td>
-                <td className="border-2 border-color-secondary text-color-pink px-4 py-2 text-center">
-                  <Button className="bg-green hover:bg-greenhover text-primary rounded-lg h-10">
-                    <ArrowSquareIn className="w-10 h-5" />
-                  </Button>
-                </td>
+      <div className="text-color-pink font-semibold flex flex-col md:flex-row mb-8 space-y-2 md:space-y-0 md:space-x-2">
+        <Select
+          value={selectedCategory}
+          onChange={setSelectedCategory}
+          options={categories}
+          className="flex-1 text-color-pink"
+          placeholder="Select Category"
+          isSearchable
+        />
+        <Select
+          value={sortBy}
+          onChange={setSortBy}
+          options={[
+            { value: "name", label: "Name" },
+            { value: "price", label: "Price" },
+            { value: "weight", label: "Weight" },
+            { value: "category_id", label: "Category" },
+            { value: "stock", label: "Stock" },
+            { value: "sku", label: "SKU" },
+            { value: "slug", label: "Slug" },
+          ]}
+          className="flex-1 text-color-pink"
+          placeholder="Sort By"
+          isSearchable
+        />
+        <Select
+          value={{ value: sortOrder, label: sortOrder.toUpperCase() }}
+          onChange={(selectedOption) => setSortOrder(selectedOption.value)}
+          options={[
+            { value: "asc", label: "Ascending" },
+            { value: "desc", label: "Descending" },
+          ]}
+          className="flex-1 text-color-pink"
+          placeholder="Sort Order"
+          isSearchable
+        />
+      </div>
+      <div className="overflow-x-auto">
+        {loading ? (
+          <p className="text-center py-4">Loading...</p>
+        ) : (
+          <table className="bg-color-primary text-color-pink rounded-lg min-w-full w-full">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  No
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Name
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Price
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Weight
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Category
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Stock
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  SKU
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Slug
+                </th>
+                <th className="px-4 py-2 border-2 border-color-customRed">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="border border-color-secondary text-color-primary flex justify-center px-2 py-4">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (number) => (
-              <button
-                key={number}
-                onClick={() => paginate(number)}
-                className={`bg-color-customRed mx-1 px-3 py-1 hover:underline rounded ${
-                  currentPage === number ? "font-bold" : ""
-                }`}
-              >
-                {number}
-              </button>
-            )
-          )}
-        </div>
+            </thead>
+            <tbody>
+              {products.length > 0 ? (
+                products.map((product, index) => (
+                  <tr key={product.id} className="border font-semibold">
+                    <td className="border-2 border-color-customRed px-4 py-2 text-center">
+                      {(currentPage - 1) * perPage + index + 1}
+                    </td>
+                    <td className="border-2 border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.name}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.price}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.weight}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.category.name}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.stock}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.sku}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      {product.slug}
+                    </td>
+                    <td className="border-2 text-center border-color-customRed px-4 py-2">
+                      <div className="flex justify-center space-x-2">
+                        <button
+                          onClick={() => handleEditProduct(product.slug)}
+                          className="text-color-dark hover:text-color-pink"
+                        >
+                          <ArrowSquareIn size={24} weight="bold" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center py-4">
+                    No Products Found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        )}
+      </div>
+      <div className="flex justify-center mt-4 space-x-2">
+        {currentPage > 1 && (
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            className="px-3 py-1 text-color-primary hover:text-color-primary rounded hover:bg-color-pink"
+          >
+            <ArrowLineLeft />
+          </button>
+        )}
+        {renderPageNumbers()}
+        {currentPage < totalPages && (
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            className="px-3 py-1 text-color-primary hover:text-color-primary rounded hover:bg-color-pink"
+          >
+            <ArrowLineRight />
+          </button>
+        )}
       </div>
     </div>
   );
 };
 
-export default ProductsPage;
+export default ProductPage;

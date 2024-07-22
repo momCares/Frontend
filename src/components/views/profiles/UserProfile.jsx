@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
   const router = useRouter();
 
-  const handleAddProductClick = () => {
-    router.push("/admin/add-products");
+  const handleManageProducts = () => {
+    router.push("/admin/products");
   };
 
   return (
@@ -28,10 +28,10 @@ const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
           </button>
           {isAdmin && (
             <button
-              onClick={handleAddProductClick}
+              onClick={handleManageProducts}
               className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
             >
-              Add Product
+              Manage Products
             </button>
           )}
         </div>
