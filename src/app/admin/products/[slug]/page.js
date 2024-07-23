@@ -5,6 +5,7 @@ import axios from "axios";
 import Select from "react-select";
 import Image from "next/image";
 import momCaresLogo from "@/assets/momcares_logo.png";
+import protectedPage from "../../../../libs/protectedPage/index";
 
 const ProductDetailPage = () => {
   const router = useRouter();
@@ -184,7 +185,7 @@ const ProductDetailPage = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="px-4 md:px-32 lg:px-64 py-8 bg-color-secondary">
+    <div className="px-4 md:px-32 lg:px-64 py-8 bg-color-secondary font-semibold">
       <h1 className="text-2xl text-color-primary underline underline-offset-8 font-bold mb-4 mt-4 justify-center flex">
         Product Details
       </h1>
@@ -261,7 +262,7 @@ const ProductDetailPage = () => {
             )}
           </div>
           <div>
-            <label className="block text-sm font-bold text-color-pink">
+            <label className="blockw text-sm font-bold text-color-pink">
               Category
             </label>
             <Select
@@ -361,4 +362,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage;
+export default protectedPage(ProductDetailPage);
