@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { debounce } from "lodash";
 import dynamic from "next/dynamic";
+import protectedPage from "../../../libs/protectedPage/index";
 
 const Select = dynamic(() => import("react-select"), { ssr: false });
 
@@ -50,7 +51,7 @@ const ProductPage = () => {
             role: "admin",
             showDeleted: true,
             searchTerms,
-            categoryId: selectedCategory ? selectedCategory.value : "",
+            categoryId: selectedCategory ? selectedCategory.value : undefined,
             sortBy: sortBy.value,
             sortOrder,
           },
@@ -171,7 +172,7 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="bg-color-secondary relative px-4 md:px-8 lg:px-32 pt-14 justify-center w-full h-screen">
+    <div className="bg-color-secondary relative px-4 md:px-8 lg:px-32 pt-14 justify-center w-full pb-12">
       <ToastContainer />
       <div className="flex flex-col md:flex-row justify-between items-center mb-12 mt-4">
         <h1 className="underline underline-offset-8 text-2xl font-bold text-color-primary">
@@ -204,7 +205,9 @@ const ProductPage = () => {
       <div className="text-color-pink font-semibold flex flex-col md:flex-row mb-8 space-y-2 md:space-y-0 md:space-x-2">
         <Select
           value={selectedCategory}
-          onChange={setSelectedCategory}
+          onChange={(selectedOption) => {
+            setSelectedCategory(selectedOption);
+          }}
           options={categories}
           className="flex-1 text-color-pink"
           placeholder="Select Category"
@@ -284,8 +287,8 @@ const ProductPage = () => {
                     <td className="border-2 border-color-customRed px-4 py-2 overflow-hidden truncate">
                       {product.name}
                     </td>
-                    <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
-                      {product.price}
+                    <td className="border-2 border-color-customRed px-4 py-2 overflow-hidden truncate">
+                      Rp. {product.price.toLocaleString()}
                     </td>
                     <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
                       {product.weight}
@@ -348,4 +351,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default protectedPage(ProductPage);

@@ -5,6 +5,7 @@ import axios from "axios";
 import Select from "react-select";
 import Image from "next/image";
 import momCaresLogo from "@/assets/momcares_logo.png";
+import protectedPage from "../../../../libs/protectedPage/index";
 
 const ProductDetailPage = () => {
   const router = useRouter();
@@ -361,4 +362,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage;
+export default protectedPage(ProductDetailPage);
