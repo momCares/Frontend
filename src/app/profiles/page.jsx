@@ -16,6 +16,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const enterEditMode = () => {
     setEditMode(true);
@@ -35,6 +36,7 @@ const ProfilePage = () => {
             user={user}
             enterEditMode={enterEditMode}
             setCurrentComponent={setCurrentComponent}
+            isAdmin={isAdmin}
           />
         );
       case "editProfile":
@@ -43,11 +45,12 @@ const ProfilePage = () => {
             user={user}
             handleUpdateUser={handleUpdateUser}
             cancelEdit={cancelEdit}
+            isAdmin={isAdmin}
           />
         );
       case "addressList":
         return (
-          <AddressList user={user} setCurrentComponent={setCurrentComponent} />
+          <AddressList user={user} setCurrentComponent={setCurrentComponent} isAdmin={isAdmin}/>
         );
       case "addAddress":
         return (
@@ -56,6 +59,7 @@ const ProfilePage = () => {
             setCurrentComponent={setCurrentComponent}
             addresses={addresses}
             setAddresses={setAddresses}
+            isAdmin={isAdmin}
           />
         );
       case "updateAddress":
@@ -63,6 +67,7 @@ const ProfilePage = () => {
           <UpdateAddress
             user={user}
             setCurrentComponent={setCurrentComponent}
+            isAdmin={isAdmin}
           />
         );
       default:
@@ -70,6 +75,7 @@ const ProfilePage = () => {
           <UserProfile
             user={user}
             setCurrentComponent={setCurrentComponent}
+            isAdmin={isAdmin}
           />
         );
     }
@@ -87,6 +93,7 @@ const ProfilePage = () => {
           const userData = await getUser(userId);
           // console.log("User Data:", userData);
           setUser(userData);
+          setIsAdmin(userData.role === "admin");
           setLoading(false);
         } catch (err) {
           setError(err.message);

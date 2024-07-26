@@ -20,20 +20,22 @@ const CardProduct = ({ products, limit }) => {
               key={product.id}
               className="w-full max-w-xs bg-color-primary border border-color-secondary rounded-lg shadow-md flex flex-col justify-between mx-2 my-2"
             >
-              <Link href={`/products/${product.id}`}>
-                <img
-                  src={imageUrl}
-                  className="p-4 rounded-t-lg h-48 w-full object-cover"
-                  alt={product.name}
-                  loading="lazy"
-                />
-                <div className="px-4 py-3">
-                  <h5 className="text-lg font-bold tracking-tight text-color-pink truncate">
-                    {product.name}
-                  </h5>
-                  <p className="text-xs text-color-pink font-semibold mt-2 truncate">
-                    {product.description}
-                  </p>
+              <Link href={`/products/${product.slug}`} legacyBehavior>
+                <div className="hover:cursor-pointer">
+                  <img
+                    src={imageUrl}
+                    className="p-4 rounded-t-lg h-48 w-full object-cover"
+                    alt={product.name}
+                    loading="lazy"
+                  />
+                  <div className="px-4 py-3">
+                    <h5 className="text-lg font-bold tracking-tight text-color-pink truncate">
+                      {product.name}
+                    </h5>
+                    <p className="text-xs text-color-pink font-semibold mt-2 truncate">
+                      {product.description}
+                    </p>
+                  </div>
                 </div>
               </Link>
               <div className="flex flex-col px-4 pb-3">

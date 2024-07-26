@@ -48,12 +48,12 @@ const DetailProfile = ({
         </div>
       </div>
 
-      <div className="w-1/2 hover:auto h-full bg-color-primary shadow-2xl rounded-lg p-12">
+      <div className="w-1/2 h-full bg-color-primary shadow-2xl rounded-lg p-12">
         <h2 className="underline underline-offset-8 text-color-pink text-2xl font-bold mb-8 p-2">
           My Profile
         </h2>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 mb-8">
           <img
             className="w-36 h-36 rounded-full"
             src="https://bit.ly/code-beast"
@@ -62,33 +62,63 @@ const DetailProfile = ({
         </div>
 
         <form className="py-4">
-          <div className="mb-4">
-            <label
-              className="block text-color-pink text-sm font-bold mb-2"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <p
-              className="w-2/5 bg-color-grey-200 shadow-md p-3"
-              aria-placeholder="User Data Here"
-            >
-              {user.name}
-            </p>
-          </div>
-          <div className="mb-8">
-            <label
-              className="block text-color-pink text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <p
-              className="w-2/5 bg-color-grey-200 shadow-md p-3"
-              aria-placeholder="User Email Here"
-            >
-              {user.email}
-            </p>
+          <div className="flex flex-wrap mb-6">
+            <div className="w-1/2 pr-4 mb-4">
+              <label
+                className="block text-color-pink text-sm font-bold mb-2"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <p
+                className="bg-color-grey-200 shadow-md p-3"
+                aria-placeholder="User Data Here"
+              >
+                {user.name}
+              </p>
+            </div>
+            <div className="w-1/2 pl-4 mb-4">
+              <label
+                className="block text-color-pink text-sm font-bold mb-2"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <p
+                className="bg-color-grey-200 shadow-md p-3"
+                aria-placeholder="User Email Here"
+              >
+                {user.email}
+              </p>
+            </div>
+            <div className="w-1/2 pr-4 mb-4">
+              <label
+                className="block text-color-pink text-sm font-bold mb-2"
+                htmlFor="affiliate"
+              >
+                Affiliate Code
+              </label>
+              <p
+                className="bg-color-grey-200 shadow-md p-3"
+                aria-placeholder="Affiliate Code Here"
+              >
+                {user.affiliate.code}
+              </p>
+            </div>
+            <div className="w-1/2 pl-4 mb-4">
+              <label
+                className="block text-color-pink text-sm font-bold mb-2"
+                htmlFor="role"
+              >
+                Role
+              </label>
+              <p
+                className="bg-color-grey-200 shadow-md p-3"
+                aria-placeholder="User Role Here"
+              >
+                {user.role}
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-center items-center">
