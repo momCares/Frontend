@@ -113,7 +113,7 @@ const CreateProductPage = () => {
         );
       }
 
-      router.push("/products");
+      router.push("/admin/products");
     } catch (error) {
       setError(error.message || "Error creating product");
     } finally {
@@ -251,7 +251,7 @@ const CreateProductPage = () => {
           <button
             type="button"
             className="bg-color-primary hover:bg-color-pink text-color-pink hover:text-color-primary font-semibold rounded-lg h-10 md:w-32 w-40"
-            onClick={() => router.push("/products")}
+            onClick={() => router.push("/admin/products")}
           >
             Cancel
           </button>
