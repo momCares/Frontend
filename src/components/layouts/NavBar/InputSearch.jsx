@@ -4,7 +4,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
-const InputSearch = ({ className, ...props }) => {
+const InputSearch = ({ className }) => {
   const searchRef = useRef();
   const router = useRouter();
 
@@ -26,7 +26,6 @@ const InputSearch = ({ className, ...props }) => {
         className={`py-2 px-5 rounded-lg text-color-dark ${className}`}
         ref={searchRef}
         onKeyDown={handleSearch}
-        {...props}
       />
       <button
         className="absolute bg-color-customRed py-[7px] px-[15px] top-[3.7px] end-1 rounded-md"

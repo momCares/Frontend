@@ -33,7 +33,7 @@ export const getShippingCost = async (data) => {
 export const updateCart = async (id, data) => {
   try {
     console.log(`Sending request to /carts/${id}`, data);
-    const response = await instance.put(`/carts/${id}`, data);
+    const response = await instance.patch(`/carts/${id}`, data); // Ubah dari PUT ke PATCH
     console.log("response received: Cart Updated ", response);
     return response.data;
   } catch (error) {

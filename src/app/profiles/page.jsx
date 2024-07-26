@@ -3,15 +3,77 @@
 import React, { useEffect, useState } from "react";
 import EditProfile from "@/components/views/profiles/EditProfile";
 import UserProfile from "@/components/views/profiles/UserProfile";
+import AddressList from "@/components/views/Address/AddressList";
+import AddAddress from "@/components/views/Address/AddAddress";
+import UpdateAddress from "@/components/views/Address/UpdateAddress";
 import { getUser, updateUser } from "../../modules/fetch/fetchUser";
 import { jwtDecode } from "jwt-decode";
 
 const ProfilePage = () => {
+  const [currentComponent, setCurrentComponent] = useState("detailProfile");
   const [user, setUser] = useState(null);
+  const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // Add state for admin role
+
+  const enterEditMode = () => {
+    setEditMode(true);
+    setCurrentComponent("editProfile");
+  };
+
+  const cancelEdit = () => {
+    setEditMode(false);
+    setCurrentComponent("detailProfile");
+  };
+
+  const renderComponent = () => {
+    switch (currentComponent) {
+      case "detailProfile":
+        return (
+          <UserProfile
+            user={user}
+            enterEditMode={enterEditMode}
+            setCurrentComponent={setCurrentComponent}
+          />
+        );
+      case "editProfile":
+        return (
+          <EditProfile
+            user={user}
+            handleUpdateUser={handleUpdateUser}
+            cancelEdit={cancelEdit}
+          />
+        );
+      case "addressList":
+        return (
+          <AddressList user={user} setCurrentComponent={setCurrentComponent} />
+        );
+      case "addAddress":
+        return (
+          <AddAddress
+            onClose={() => setCurrentComponent("addressList")}
+            setCurrentComponent={setCurrentComponent}
+            addresses={addresses}
+            setAddresses={setAddresses}
+          />
+        );
+      case "updateAddress":
+        return (
+          <UpdateAddress
+            user={user}
+            setCurrentComponent={setCurrentComponent}
+          />
+        );
+      default:
+        return (
+          <UserProfile
+            user={user}
+            setCurrentComponent={setCurrentComponent}
+          />
+        );
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,8 +85,8 @@ const ProfilePage = () => {
       const fetchUser = async () => {
         try {
           const userData = await getUser(userId);
+          // console.log("User Data:", userData);
           setUser(userData);
-          setIsAdmin(userData.role === "admin"); // Check if user is admin
           setLoading(false);
         } catch (err) {
           setError(err.message);
@@ -41,37 +103,16 @@ const ProfilePage = () => {
       window.location.reload();
       setEditMode(false);
     } catch (error) {
-      setError(error.message); // Fix error handling
+      setError(err.message);
     }
-  };
-
-  const enterEditMode = () => {
-    setEditMode(true);
-  };
-
-  const cancelEdit = () => {
-    setEditMode(false);
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="flex flex-col items-center p-8 bg-color-secondary min-h-screen">
-      {editMode ? (
-        <EditProfile
-          user={user}
-          handleUpdateUser={handleUpdateUser}
-          cancelEdit={cancelEdit}
-          isAdmin={isAdmin} // Pass isAdmin prop to EditProfile
-        />
-      ) : (
-        <UserProfile
-          user={user}
-          enterEditMode={enterEditMode}
-          isAdmin={isAdmin} // Pass isAdmin prop to UserProfile
-        />
-      )}
+    <div className="flex flex-col items-center p-8 bg-color-secondary min-h-full">
+      {renderComponent()}
     </div>
   );
 };

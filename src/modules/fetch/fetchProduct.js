@@ -15,7 +15,7 @@ export const findAllProduct = async () => {
 
 export const findOneProduct = async (slug, role = "admin") => {
   try {
-    const response = await axiosInstance.get(`/products/${slug}`, {
+    const response = await axiosInstance.get(`/products/slug/${slug}`, {
       params: { role },
     });
 
