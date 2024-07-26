@@ -35,7 +35,7 @@ const ProductDetailPage = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/cms/products/${slug}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/cms/products/slug/${slug}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

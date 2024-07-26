@@ -3,7 +3,12 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
+const DetailProfile = ({
+  user,
+  enterEditMode,
+  setCurrentComponent,
+  isAdmin,
+}) => {
   const router = useRouter();
 
   const handleManageProducts = () => {
@@ -13,11 +18,17 @@ const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
   return (
     <div className="bg-color-secondary flex flex-row items-center px-8 w-full py-2">
       <div className="w-4/12 h-screen p-10">
-        <h2 className="underline underline-offset-8 text-color-primary flex flex-row text-2xl font-bold mb-20">
+        <button
+          onClick={() => setCurrentComponent("detailProfile")}
+          className="underline underline-offset-8 text-color-primary flex flex-row text-2xl font-bold mb-20"
+        >
           Account Setting
-        </h2>
+        </button>
         <div className="text-color-primary font-semibold flex flex-col items-start">
-          <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
+          <button
+            onClick={() => setCurrentComponent("addressList")}
+            className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
+          >
             List Address
           </button>
           <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
@@ -48,14 +59,6 @@ const DetailProfile = ({ user, enterEditMode, editMode, isAdmin }) => {
             src="https://bit.ly/code-beast"
             alt="Profile"
           />
-          <div className="flex flex-col p-2 w-52">
-            <button className="text-color-primary w-full font-semibold rounded-lg h-10 bg-color-pink my-2 shadow-sm hover:bg-color-customRed">
-              Change Picture
-            </button>
-            <button className="text-color-primary w-full font-semibold rounded-lg h-10 bg-color-pink shadow-sm hover:bg-color-red">
-              Delete Picture
-            </button>
-          </div>
         </div>
 
         <form className="py-4">
