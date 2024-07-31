@@ -1,13 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItem from "@/components/views/cart/CartItem";
 import CartSummary from "@/components/views/cart/CartSummary";
 import CartActions from "@/components/views/cart/CartActions";
+import { useRouter } from "next/navigation";
+import { findOneCart } from "@/modules/fetch/fetchCart";
 
 export default function CartsView({ setCart }) {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [carts, setCarts] = useState([]); 
+  const [error, setError] = useState(null);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const listCarts = await findOneCart();
+        setCarts(listCarts);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchCart();
+  }, []);
 
   const cart = [
     {
@@ -87,16 +103,14 @@ export default function CartsView({ setCart }) {
             clearCart={clearCart}
             selectedItems={selectedItems}
           />
-          {cart?.map((product, idx) => (
-            <CartItem
-              key={idx}
-              product={product}
+
+          <CartItem
+              carts={carts}
               selectedItems={selectedItems}
               handleSelectItem={handleSelectItem}
               removeFromCart={removeFromCart}
               setQuantity={setQuantity}
             />
-          ))}
         </div>
 
         <CartSummary totalCost={getTotalCost()} />
