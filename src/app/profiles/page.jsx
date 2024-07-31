@@ -50,7 +50,11 @@ const ProfilePage = () => {
         );
       case "addressList":
         return (
-          <AddressList user={user} setCurrentComponent={setCurrentComponent} isAdmin={isAdmin}/>
+          <AddressList
+            user={user}
+            setCurrentComponent={setCurrentComponent}
+            isAdmin={isAdmin}
+          />
         );
       case "addAddress":
         return (
@@ -65,6 +69,7 @@ const ProfilePage = () => {
       case "updateAddress":
         return (
           <UpdateAddress
+            onClose={() => setCurrentComponent("addressList")}
             user={user}
             setCurrentComponent={setCurrentComponent}
             isAdmin={isAdmin}
@@ -91,7 +96,6 @@ const ProfilePage = () => {
       const fetchUser = async () => {
         try {
           const userData = await getUser(userId);
-          // console.log("User Data:", userData);
           setUser(userData);
           setIsAdmin(userData.role === "admin");
           setLoading(false);

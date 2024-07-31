@@ -2,9 +2,7 @@ import axiosInstance from "@/libs/axios/axiosInstance";
 
 export const findAllAddress = async () => {
   try {
-    // console.log("Sending request to /addresses");
     const response = await axiosInstance.get("/address");
-    // console.log("response received: ", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -17,9 +15,7 @@ export const findAllAddress = async () => {
 
 export const findOneAddress = async (id) => {
   try {
-    // console.log("Finding Address id ...");
     const response = await axiosInstance.get(`/address/${id}`);
-    // console.log("Data Found: ", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -32,10 +28,7 @@ export const findOneAddress = async (id) => {
 
 export const createAddress = async (data) => {
   try {
-    // console.log("Sending request to /addresses");
-    // console.log(data, "<<<<DATA");
     const response = await axiosInstance.post("/address", data);
-    // console.log("response received: ", response.data);
     return response.data;
   } catch (error) {
     console.error(
@@ -53,13 +46,7 @@ export const updateAddress = async (id, data) => {
       province_id: data.province,
     };
 
-    //   console.log("Sending request to /address/" + id);
-    //   console.log("Request data:", updatedData);
-
     const response = await axiosInstance.put(`/address/${id}`, updatedData);
-
-    //   console.log("Response status:", response.status);
-    //   console.log("Response data:", response.data);
 
     return response.data;
   } catch (error) {

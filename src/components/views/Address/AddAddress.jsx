@@ -11,6 +11,7 @@ const AddAddress = ({
 }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
   const [cityOptions, setCityOptions] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [provinceOptions, setProvinceOptions] = useState([]);
@@ -53,6 +54,7 @@ const AddAddress = ({
     const newAddress = {
       title: title,
       description: description,
+      detail_address: detailAddress,
       city_id: selectedCity?.value,
       zip_code: Number(zipCode),
       province_id: selectedProvince?.value,
@@ -84,11 +86,22 @@ const AddAddress = ({
         </div>
 
         <div>
-          <label className="font-semibold">Detail Address</label>
+          <label className="font-semibold">Descriptions</label>
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="Enter your address"
+            className="p-2 border rounded-lg w-full"
+          />
+        </div>
+
+        <div>
+          <label className="font-semibold">Detail Address</label>
+          <input
+            type="text"
+            value={detailAddress}
+            onChange={(e) => setDetailAddress(e.target.value)}
             placeholder="Enter your address"
             className="p-2 border rounded-lg w-full"
           />
@@ -116,7 +129,7 @@ const AddAddress = ({
           />
         </div>
 
-        <div className="col-span-2">
+        <div>
           <label className="font-semibold">Postal Code</label>
           <input
             type="text"

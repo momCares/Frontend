@@ -105,20 +105,22 @@ const DetailProfile = ({
                 {user.affiliate.code}
               </p>
             </div>
-            <div className="w-1/2 pl-4 mb-4">
-              <label
-                className="block text-color-pink text-sm font-bold mb-2"
-                htmlFor="role"
-              >
-                Role
-              </label>
-              <p
-                className="bg-color-grey-200 shadow-md p-3"
-                aria-placeholder="User Role Here"
-              >
-                {user.role}
-              </p>
-            </div>
+            {isAdmin && (
+              <div className="w-1/2 pl-4 mb-4">
+                <label
+                  className="block text-color-pink text-sm font-bold mb-2"
+                  htmlFor="role"
+                >
+                  Role
+                </label>
+                <p
+                  className="bg-color-grey-200 shadow-md p-3"
+                  aria-placeholder="User Role Here"
+                >
+                  {user.role}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-center items-center">

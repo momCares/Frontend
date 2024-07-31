@@ -153,7 +153,7 @@ const ProductDetailPage = () => {
       }
 
       // Redirect to the products page
-      router.push("/products");
+      router.push("/admin/products");
     } catch (error) {
       setError(error.message || "Error saving product data");
     }
