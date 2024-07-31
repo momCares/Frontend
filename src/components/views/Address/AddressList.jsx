@@ -75,14 +75,10 @@ const AddressList = ({ setCurrentComponent }) => {
               >
                 List Address
               </button>
-              <button
-                className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
-              >
+              <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
                 Change Password
               </button>
-              <button
-                className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
-              >
+              <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
                 Checkout List
               </button>
             </div>
@@ -102,23 +98,27 @@ const AddressList = ({ setCurrentComponent }) => {
                   className="border border-color-secondary rounded-lg p-8 mb-5 text-color-pink"
                 >
                   <label className="text-lg font-semibold mb-3 py-8">
-                    Nama Penerima
+                    Reciever Name
                   </label>
                   <p>{address.user.name}</p>
                   <label className="text-lg font-semibold mb-3 py-8">
-                    Detail Alamat
+                    Descriptions
                   </label>
                   <p>{address.description}</p>
                   <label className="text-lg font-semibold mb-3 py-8">
-                    Kode Pos
+                    Address Detail
+                  </label>
+                  <p>{address.detail_address}</p>
+                  <label className="text-lg font-semibold mb-3 py-8">
+                    Postal Code
                   </label>
                   <p>{address.zip_code}</p>
                   <label className="text-lg font-semibold mb-3 py-8">
-                    Kota
+                    City
                   </label>
                   <p>{address.city.name}</p>
                   <label className="text-lg font-semibold mb-3 py-8">
-                    Provinsi
+                    Province
                   </label>
                   <p>{address.province.name}</p>
                   <button

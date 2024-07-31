@@ -6,6 +6,7 @@ import axiosInstance from "@/libs/axios/axiosInstance";
 const UpdateAddress = ({ addressId, onClose, setCurrentComponent }) => {
   const [receiverName, setReceiverName] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
+  const [description, setDescription] = useState("");
   const [cityOptions, setCityOptions] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [provinceOptions, setProvinceOptions] = useState([]);
@@ -18,7 +19,8 @@ const UpdateAddress = ({ addressId, onClose, setCurrentComponent }) => {
         const address = await findOneAddress(addressId);
         console.log("Address ID in UpdateAddress:", addressId);
         setReceiverName(address.user?.name);
-        setDetailAddress(address.description);
+        setDescription(address.description);
+        setDetailAddress(address.detail_address);
         setSelectedCity({ value: address.city.name, label: address.city.name });
         setSelectedProvince({
           value: address.province.name,
@@ -64,13 +66,15 @@ const UpdateAddress = ({ addressId, onClose, setCurrentComponent }) => {
     e.preventDefault();
     try {
       const updatedAddress = await updateAddress(addressId, {
-        description: detailAddress,
+        description: description,
+        detail_address: detailAddress,
         city_id: selectedCity.value,
         province: selectedProvince.value,
         zip_code: Number(postalCode),
       });
       console.log("Address updated:", updatedAddress);
       setCurrentComponent("addressList");
+      window.location.reload(); // Refresh the page
     } catch (error) {
       console.error("Error updating address:", error);
     }
@@ -92,14 +96,10 @@ const UpdateAddress = ({ addressId, onClose, setCurrentComponent }) => {
           >
             List Address
           </button>
-          <button
-            className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
-          >
+          <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
             Change Password
           </button>
-          <button
-            className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
-          >
+          <button className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink">
             Checkout List
           </button>
         </div>
@@ -155,6 +155,17 @@ const UpdateAddress = ({ addressId, onClose, setCurrentComponent }) => {
                 onChange={setSelectedProvince}
                 placeholder="Select province"
                 className="mt-1 w-full text-color-pink rounded-md border border-color-customRed"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="font-bold text-color-pink">Descriptions</label>
+              <input
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter descriptions"
+                className="border-2 border-color-customRed rounded-lg p-2 w-full text-color-pink"
               />
             </div>
 
