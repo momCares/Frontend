@@ -26,22 +26,7 @@ export default function CartsView({ setCart }) {
   }, []);
 
   const cart = [
-    {
-      category: "Baby cares",
-      name: "Diapers",
-      cost: 10.00,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRKGLPQvjmD9eT1EYNrLd-ZE5ZWPcPQfA3zg&s",
-      quantity: 10,
-    },
-    {
-      category: "Foods",
-      name: "Nutrilon Royal",
-      cost: 19.99,
-      image:
-        "https://images.tokopedia.net/img/JFrBQq/2023/5/27/64496710-b123-411a-befd-f093caa797b3.jpg",
-      quantity: 10,
-    },
+    {},
   ];
 
   const getTotalCost = () => {
