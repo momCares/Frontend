@@ -1,31 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItem from "@/components/views/cart/CartItem";
 import CartSummary from "@/components/views/cart/CartSummary";
 import CartActions from "@/components/views/cart/CartActions";
+import { useRouter } from "next/navigation";
+import { findOneCart } from "@/modules/fetch/fetchCart";
 
 export default function CartsView({ setCart }) {
   const [selectAll, setSelectAll] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [carts, setCarts] = useState([]); 
+  const [error, setError] = useState(null);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const listCarts = await findOneCart();
+        setCarts(listCarts);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchCart();
+  }, []);
 
   const cart = [
-    {
-      category: "Baby cares",
-      name: "Diapers",
-      cost: 10.00,
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRKGLPQvjmD9eT1EYNrLd-ZE5ZWPcPQfA3zg&s",
-      quantity: 10,
-    },
-    {
-      category: "Foods",
-      name: "Nutrilon Royal",
-      cost: 19.99,
-      image:
-        "https://images.tokopedia.net/img/JFrBQq/2023/5/27/64496710-b123-411a-befd-f093caa797b3.jpg",
-      quantity: 10,
-    },
+    {},
   ];
 
   const getTotalCost = () => {
@@ -87,16 +88,14 @@ export default function CartsView({ setCart }) {
             clearCart={clearCart}
             selectedItems={selectedItems}
           />
-          {cart?.map((product, idx) => (
-            <CartItem
-              key={idx}
-              product={product}
+
+          <CartItem
+              carts={carts}
               selectedItems={selectedItems}
               handleSelectItem={handleSelectItem}
               removeFromCart={removeFromCart}
               setQuantity={setQuantity}
             />
-          ))}
         </div>
 
         <CartSummary totalCost={getTotalCost()} />
