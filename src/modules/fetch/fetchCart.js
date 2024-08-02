@@ -15,6 +15,26 @@ export const findOneCart = async (data) => {
   }
 };
 
+export const addToCart = async (data) => {
+  try {
+    const { product_id } = data;
+    const response = await instance.post(`/carts/${product_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteProduct = async (data) => {
+  try {
+    const { product_id } = data;
+    const response = await instance.delete(`/carts/${product_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getShippingCost = async (data) => {
   try {
     console.log(`Sending request to /carts/shipping-cost`, data);
@@ -30,17 +50,11 @@ export const getShippingCost = async (data) => {
   }
 };
 
-export const updateCart = async (id, data) => {
+export const updateCart = async (data) => {
   try {
-    console.log(`Sending request to /carts/${id}`, data);
-    const response = await instance.patch(`/carts/${id}`, data); // Ubah dari PUT ke PATCH
-    console.log("response received: Cart Updated ", response);
+    const response = await instance.put("/carts", data);
     return response.data;
   } catch (error) {
-    console.error(
-      "Error updating cart:",
-      error.response ? error.response.data : error.message
-    );
     throw error;
   }
 };

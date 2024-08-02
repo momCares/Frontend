@@ -1,8 +1,10 @@
 import axiosInstance from "@/libs/axios/axiosInstance";
 
-export const findAllAddress = async () => {
+export const findAllAddress = async (userId) => {
   try {
-    const response = await axiosInstance.get("/address");
+    const response = await axiosInstance.get(`/address`, {
+      params: { userId },
+    });
     return response.data;
   } catch (error) {
     console.error(

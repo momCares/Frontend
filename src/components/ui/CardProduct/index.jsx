@@ -2,10 +2,17 @@
 import Button from "@/components/ui/Button";
 import { Heart, ShoppingCart } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useState } from "react";
+import { addToCart } from "@/modules/fetch/fetchCart";
+import { convertToRupiah } from "@/libs/convertToRupiah";
 
 const CardProduct = ({ products, limit }) => {
   const productList = products?.data?.products || [];
   const displayedProducts = productList.slice(0, limit);
+
+  const handleAddCart = async (id) => {
+    const response = await addToCart({ product_id: id });
+  };
 
   return (
     <div className="place-content-center flex flex-wrap gap-4 mt-10">
@@ -41,14 +48,17 @@ const CardProduct = ({ products, limit }) => {
                 </div>
               </Link>
               <div className="flex flex-col px-4 pb-3">
-                <h5 className="text-lg font-bold text-color-pink">
-                  Rp. <span>{product.price.toLocaleString("id-ID")}</span>
+                <h5 className="text-sm font-bold text-color-pink">
+                  <span>{convertToRupiah(product.price)}</span>
                 </h5>
                 <div className="flex justify-between gap-2 pt-2">
                   <Button className="flex border-2 border-color-pink justify-center items-center text-color-red gap-1 py-1 px-1 rounded-lg">
                     <Heart size={24} weight="fill" />
                   </Button>
-                  <Button className="flex bg-color-pink justify-center items-center text-color-primary gap-1 py-1 px-1 rounded-lg">
+                  <Button
+                    onClick={(e) => handleAddCart(product.id)}
+                    className="flex bg-color-pink justify-center items-center text-color-primary gap-1 py-1 px-1 rounded-lg"
+                  >
                     <ShoppingCart size={24} />
                   </Button>
                 </div>
