@@ -26,7 +26,7 @@ export const findOneProduct = async (slug, role = "admin") => {
         if (image.url) {
           image.url = image.url.replace(/\\/g, "/");
           try {
-            image.url = new URL(image.url, baseURL).toString();
+            image.url = new URL(`/${image.url}`, baseURL).toString();
           } catch (e) {
             console.error("Invalid image URL:", image.url);
           }
