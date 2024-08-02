@@ -241,7 +241,7 @@ const AddPromoPage = () => {
           <button
             type="button"
             className="bg-color-primary hover:bg-color-pink text-color-pink hover:text-color-primary font-semibold rounded-lg h-10 md:w-32 w-40"
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/admin/promo")}
           >
             Cancel
           </button>
