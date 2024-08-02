@@ -12,7 +12,9 @@ const CardProduct = ({ products, limit }) => {
       {displayedProducts.length > 0 ? (
         displayedProducts.map((product) => {
           const imageUrl = product.product_images[0]?.url
-            ? `${process.env.NEXT_PUBLIC_IMAGE_API_URL}/${product.product_images[0]?.url.replace(/\\/g, "/")}`
+            ? `${
+                process.env.NEXT_PUBLIC_IMAGE_API_URL
+              }/${product.product_images[0]?.url.replace(/\\/g, "/")}`
             : "/momcares_logo.png";
 
           return (
