@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 #About MomCares
 
-![alt text](image.png)
+![alt text](src\assets\momcares_logo.png)
 MomCares is an e-commerce website that especially made for moms and baby stuffs
 
 ##About This Project
