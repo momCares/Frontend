@@ -42,7 +42,11 @@ const PromoPage = () => {
         }
       );
       const promoData = response.data.data;
-      setPromo(promoData.promo);
+  
+      // Filter out soft-deleted promos
+      const filteredPromos = promoData.promo.filter(p => !p.deleted_at);
+  
+      setPromo(filteredPromos);
       setTotalPages(promoData.totalPages);
     } catch (error) {
       console.error("Fetch promo error:", error.message || error);
@@ -51,7 +55,7 @@ const PromoPage = () => {
       setLoading(false);
     }
   };
-
+  
   const paginate = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > totalPages) return;
     setCurrentPage(pageNumber);
@@ -62,7 +66,7 @@ const PromoPage = () => {
   };
 
   const handleEditPromo = (id) => {
-    router.push(`/admin/edit-promo/${id}`);
+    router.push(`/admin/promo/${id}`);
   };
 
   const renderPageNumbers = () => {
@@ -173,7 +177,7 @@ const PromoPage = () => {
                       {promo.quantity}
                     </td>
                     <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
-                      {promo.products ? promo.products.join(", ") : "N/A"}
+                      {promo.products && promo.products.length > 0 ? promo.products.map(product => product.name).join(", ") : "N/A"}
                     </td>
                     <td className="border-2 text-center border-color-customRed px-4 py-2 overflow-hidden truncate">
                       {new Date(promo.start_date).toLocaleDateString()}

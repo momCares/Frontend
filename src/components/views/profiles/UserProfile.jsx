@@ -15,6 +15,10 @@ const DetailProfile = ({
     router.push("/admin/products");
   };
 
+  const handleManagePromo = () => {
+    router.push("/admin/promo");
+  };
+
   return (
     <div className="bg-color-secondary flex flex-row items-center px-8 w-full py-2">
       <div className="w-4/12 h-screen p-10">
@@ -38,12 +42,20 @@ const DetailProfile = ({
             Checkout List
           </button>
           {isAdmin && (
-            <button
-              onClick={handleManageProducts}
-              className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
-            >
-              Manage Products
-            </button>
+            <>
+              <button
+                onClick={handleManageProducts}
+                className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
+              >
+                Manage Products
+              </button>
+              <button
+                onClick={handleManagePromo}
+                className="w-full text-left p-2 rounded-lg h-10 my-2 hover:bg-color-pink"
+              >
+                Manage Promos
+              </button>
+            </>
           )}
         </div>
       </div>
