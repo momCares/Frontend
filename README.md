@@ -1,18 +1,80 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+#About MomCares
 
-First, run the development server:
+![alt text](image.png)
+MomCares is an e-commerce website that especially made for moms and baby stuffs
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+##About This Project
+
+Screenshot ui momcares
+In the end of the bootcamp in Rakamin Academy, the students have to make a final project with the team formed by Rakamin. And the final project for Fullstack Web-Development is make a website with several needs and requirements. Our team called"MomCares Team" has 7 members, i.e. :
+
+Jovano Nahak (Team Leader)
+Achmad Hikami Majid
+Alvian Pradiknatama
+Bima Arianda Sakti
+Muhammad lqbal Supriatna
+R Treva Agung Rakaputra
+RR Sylva Prayuniza
+
+##Feature
+
+This website facilities the buying and selling digital products for mom and baby online. The feature include:
+Authentication for user and admin
+Admin dashboard
+User profiles
+Pricing and product catalog
+Order and Cart management
+Checking shipping cost integration with Raja Ongkir
+Streamline checking out
+Manual payment checking for admin
+Responsive design
+
+##Tech-Stack
+
+Frontend:Next.Js, React, Tailwind CSS
+Backend:Express.js, Node.js
+Database:PostgreSQL
+Object Relation:prisma ORM
+API Integration:Raja Ongkir
+API Testing:Postman
+
+##Installation
+Make sure you have installed node.js in your device
+Make a folder, example(momcares)
+Clone the repository to the terminal, and do some installs
+Link url repo momcares
+cd momcares
+
+    -npm install
+
+###Setup Frontend
+
+cd folder name
+Setup environtment (.env.local) variables:
+
+NEXT PUBLIC_API URL-http://localhost:5000/ api
+
+start the server :
+-npm run dev
+
+###Setup Backend
+cd folder name
+⁠set up .env file :
+DATABASE_URL= postgresql://user:password@localhost:5432/momcares
+RAJA_ONGKIR_API_KEY =
+migration the database
+
+    -npx prisma migrate dev
+
+start the server
+
+    -npm start
+
+###API Testing
+
+Use postman to test the API endpoints
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
